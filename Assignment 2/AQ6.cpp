@@ -1,7 +1,3 @@
-// Arpit
-// 1024030969
-// 2C72
-// Question 5
 
 #include <iostream>
 using namespace std;
@@ -54,12 +50,16 @@ vector<vector<int>> multiply (vector<vector<int>> &mat1 , vector<vector<int>>& m
             if(val!= 0 )triplet2.push_back({i , j , val});
         }
     }
-    
+    vector<vector<int>> ans(mat1.size(), vector<int>(mat2.size(), 0));
+    for (int i = 0; i < triplet1.size(); i++){
+    for (int j = 0; j < triplet2.size(); j++){
+        if (triplet1[i][1] == triplet2[j][0]){
+            // col of mat1 == row of mat2
+            ans[triplet1[i][0]][triplet2[j][1]] += triplet1[i][2] * triplet2[j][2];
+            }
+        }
+    }
 
-
-
-
-    vector<vector<int>> ans;
 
     return ans;
 }
