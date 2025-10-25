@@ -47,8 +47,8 @@ class SLL{
 };
 int main(){
     SLL V;
-    for(int i = 0 ; i < 2; i++)
-    V.push_front(i);
+    for(int i = 4 ; i > 0; i--)
+    V.push_front(i); // here push_front() is used not push_back()
     V.display();
     // reversing list
     V.reverse();

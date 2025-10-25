@@ -51,7 +51,7 @@ class SLL{
     Node* middle(Node* head){
         Node* slow = head;
         Node* fast = head;
-        while (fast->next != NULL || fast!= NULL  )
+        while (fast!= NULL && fast->next != NULL )
         {
             slow = slow->next;
             fast = fast->next->next;
@@ -61,8 +61,8 @@ class SLL{
     
 int main(){
     SLL List;
-    for(int i = 0 ; i < 10 ; i++)List.push_back(i);
+    for(int i = 0 ; i < 5 ; i++)List.push_back(i+1);
     List.display();
-    Node* mid = new Node(middle(List.head)->val);
+    Node* mid = middle(List.head);
     cout<<endl<<mid->val;
 }

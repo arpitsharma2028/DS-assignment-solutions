@@ -1,141 +1,175 @@
 #include <iostream>
 using namespace std;
 
-class Node{
-    public:
-    Node* next ;
+class Node {
+public:
     int val;
-    Node(int num){
+    Node* next;
+    Node(int num) {
         val = num;
         next = NULL;
     }
 };
-class SLL{
-    // insertion at begining
-    public:
+
+class SLL {
+public:
     Node* head;
-    SLL(){
+    SLL() {
         head = NULL;
     }
-    void push_front(int val){
-        Node* temp = head;
+
+    // (a) Insertion at beginning
+    void push_front(int val) {
         Node* newNode = new Node(val);
+        newNode->next = head;
         head = newNode;
-        head->next = temp;
     }
-    void push_back(int val){
+
+    // (b) Insertion at end
+    void push_back(int val) {
         Node* newNode = new Node(val);
-        Node*temp = head;
-        if(head == NULL) {
+        if (head == NULL) {
             head = newNode;
             return;
         }
-        while(temp->next != NULL){
-            temp = temp->next;
-        }
+        Node* temp = head;
+        while (temp->next != NULL) temp = temp->next;
         temp->next = newNode;
     }
-    void pop_front(){
-        if(head == NULL)return;
-        else if(head->next == NULL){
+
+    // (c) Insertion before/after a specific value
+    void insertBefore(int target, int val) {
+        if (head == NULL) return;
+        if (head->val == target) {
+            push_front(val);
+            return;
+        }
+        Node* temp = head;
+        while (temp->next != NULL && temp->next->val != target) temp = temp->next;
+        if (temp->next == NULL) {
+            cout << "Target value " << target << " not found!\n";
+            return;
+        }
+        Node* newNode = new Node(val);
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+
+    void insertAfter(int target, int val) {
+        Node* temp = head;
+        while (temp != NULL && temp->val != target) temp = temp->next;
+        if (temp == NULL) {
+            cout << "Target value " << target << " not found!\n";
+            return;
+        }
+        Node* newNode = new Node(val);
+        newNode->next = temp->next;
+        temp->next = newNode;
+    }
+
+    // (d) Deletion from beginning
+    void pop_front() {
+        if (head == NULL) return;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    // (e) Deletion from end
+    void pop_back() {
+        if (head == NULL) return;
+        if (head->next == NULL) {
             delete head;
             head = NULL;
+            return;
         }
-        else{
+        Node* temp = head;
+        while (temp->next->next != NULL) temp = temp->next;
+        delete temp->next;
+        temp->next = NULL;
+    }
+
+    // (f) Deletion of a specific node (by value)
+    void deleteValue(int value) {
+        if (head == NULL) return;
+        if (head->val == value) {
             Node* temp = head;
             head = head->next;
             delete temp;
             return;
         }
-    }
-    void insert(int val , int idx){
-        Node* newNode = new Node(val);
-        if(idx == 0){
-            push_front(val);
+        Node* temp = head;
+        while (temp->next != NULL && temp->next->val != value) temp = temp->next;
+        if (temp->next == NULL) {
+            cout << "Value " << value << " not found!\n";
             return;
         }
-        Node * temp = head;
-        
-        for(int i = 0 ; i < idx-1 && temp != NULL; i++){
-            temp = temp->next;
-        }
-        // now temp points to just previous element of required index
-        cout<<temp->val<<endl;
-        if(temp == NULL) {
-        cout << "Index out of bounds\n";
-        delete newNode;
-        return;
-        }
-        newNode->next = temp->next;
-        temp->next = newNode;
-        return;
-    }
-    void pop_back() {
-        if(head == NULL) return;
-        if(head->next == NULL) {
-            delete head;
-            head = NULL;
-            return;
-        }
-        Node* temp = head;
-        Node* prev = NULL;
-        while(temp->next != NULL) {
-            prev = temp;
-            temp = temp->next;
-        }
-        prev->next = NULL;
-        delete temp;
-    }
-    Node* deleteNode(int x) { // assuming indexing from 0
-         Node* temp = head;
-         Node* prev = NULL;
-         if(x == 0){
-             Node* temp = head;
-             head = head->next;
-             delete temp;
-             return head;
-         }
-        for(int i = 0 ; i < x && temp != NULL ; i++){
-            prev = temp;
-            temp = temp->next;
-        }
-        if(temp == NULL){
-            return head;
-        }
-        prev->next = temp->next;
-        delete temp;
-    return head;
-    }
-    int search(int value){
-        int count = 0;
-        Node* temp = head;
-        while(temp!= NULL && temp->val != value){
-            temp = temp->next;
-            count++;
-        }
-        return (temp == NULL)? -1 : count;
-    }
-    void display(){
-        Node*temp = head;
-        while(temp!= NULL){
-            cout<<temp->val<<"->";
-            temp = temp->next;
-        }
-        cout<<"NULL"<<endl;
-        return;
+        Node* del = temp->next;
+        temp->next = del->next;
+        delete del;
     }
 
+    // (g) Search node and return position
+    int search(int value) {
+        Node* temp = head;
+        int index = 0;
+        while (temp != NULL) {
+            if (temp->val == value) return index;
+            temp = temp->next;
+            index++;
+        }
+        return -1;
+    }
+
+    // (h) Display all nodes
+    void display() {
+        Node* temp = head;
+        if (temp == NULL) {
+            cout << "List is empty\n";
+            return;
+        }
+        while (temp != NULL) {
+            cout << temp->val << " -> ";
+            temp = temp->next;
+        }
+        cout << "NULL\n";
+    }
 };
-int main(){
-    SLL V;
+int main() {
     SLL list;
+
+    cout << "Insertion at beginning and end:\n";
     list.push_back(10);
     list.push_back(20);
     list.push_front(5);
     list.display(); // 5->10->20->NULL
-    list.insert(15, 2);
+
+    cout << "\nInsertion after 10 (insert 15):\n";
+    list.insertAfter(10, 15);
     list.display(); // 5->10->15->20->NULL
-    list.deleteNode(1);
-    list.display(); // 5->15->20->NULL
-    cout<< "15 is at "<<list.search(15)<<"th index"<<endl; //  15 is at 1th index
+
+    cout << "\nInsertion before 10 (insert 7):\n";
+    list.insertBefore(10, 7);
+    list.display(); // 5->7->10->15->20->NULL
+
+    cout << "\nDeletion from beginning:\n";
+    list.pop_front();
+    list.display(); // 7->10->15->20->NULL
+
+    cout << "\nDeletion from end:\n";
+    list.pop_back();
+    list.display(); // 7->10->15->NULL
+
+    cout << "\nDelete specific node (value 10):\n";
+    list.deleteValue(10);
+    list.display(); // 7->15->NULL
+
+    cout << "\nSearch for value 15:\n";
+    int pos = list.search(15);
+    if (pos != -1)
+        cout << "15 is at index " << pos << endl;
+    else
+        cout << "15 not found\n";
+
+    return 0;
 }

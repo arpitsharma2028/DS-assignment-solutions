@@ -41,34 +41,37 @@ class SLL{
         return;
     }
 };
-Node* KeyDeletion(Node* head , int key){
-    if(head == NULL)return NULL;
-    while (head->val == key)
-    {
+Node* KeyDeletion(Node* head, int key) {
+    int count = 0;
+    if (head == NULL) return NULL;
+
+    // Delete occurrences at the head
+    while (head != NULL && head->val == key) {
+        count++;
         Node* temp = head;
         head = head->next;
         delete temp;
     }
-    Node * temp = head;
-    Node * prev = head;
-    int count = 0; // ocunt number of occurences
-    while (temp != NULL)
-    {
-        if(temp->val == key){
+
+    Node* temp = head;
+    Node* prev = NULL;
+
+    while (temp != NULL) {
+        if (temp->val == key) {
             count++;
-            Node * ToDelete = temp;
             prev->next = temp->next;
-            temp = temp->next;
-            delete ToDelete;
-        }
-        else{
+            delete temp;
+            temp = prev->next;
+        } else {
             prev = temp;
             temp = temp->next;
         }
     }
-    cout<<"Number of occurences are "<<count<<endl;
-    return head;    
+
+    cout << "Number of occurrences are " << count << endl;
+    return head;
 }
+
 int main(){
     SLL List;
     List.push_back(1);
@@ -81,5 +84,4 @@ int main(){
     List.display();
     List.head = KeyDeletion(List.head , 1);
     List.display();
-
 }
