@@ -21,5 +21,9 @@ bool isValid(string str) {
     return s.empty();
     }
 int main(){
-
+vector<string> s = {"({[})", "([)]", "({[]})"};
+    for(string str : s){
+        if(isValid(str)) cout << "valid" << endl;
+        else cout << "not valid" << endl;
+    }
 }
